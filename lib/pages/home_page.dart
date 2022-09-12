@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cats/bloc/cat_events.dart';
 import 'package:cats/bloc/cat_state.dart';
 import 'package:cats/bloc/cats_bloc.dart';
-import 'package:cats/pages/history_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,20 +34,20 @@ class _HomePageState extends State<HomePage> {
                       const CircularProgressIndicator(),
                 ),
               ),
-              const Flexible(
+              Flexible(
                 flex: 3,
-                child: SingleChildScrollView(),
+                child: SingleChildScrollView(child: method1(catState)),
               ),
               Flexible(
                 flex: 1,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    OutlinedButton(
-                        onPressed: _refresh(bloc),
+                    CupertinoButton(
+                        onPressed: _refreshButton(bloc),
                         child: const Text('Another fact!')),
-                    OutlinedButton(
-                        onPressed: _showDetails(bloc, context),
+                    CupertinoButton(
+                        onPressed: _showDetailsButton(bloc, context),
                         child: const Text('Fact History'))
                   ],
                 ),
@@ -59,17 +59,39 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _refresh(CatsBloc bloc) {
+  _refreshButton(CatsBloc bloc) {
+    bloc.updateCurrentIndex();
     bloc.add(NewFactEvent());
+    print('fact add');
   }
 
-  _showDetails(CatsBloc bloc, BuildContext context) {
+  _showDetailsButton(CatsBloc bloc, BuildContext context) {
+    print('histroy add');
     bloc.add(HistoryEvent());
-    Navigator.push(
+
+    /*   Navigator.push(
       context,
       MaterialPageRoute(builder: (context) {
         return const HistoryPage();
       }),
-    );
+    );*/
+  }
+
+  method1(CatState state) {
+    print('method1');
+    if (state is NewFactState) {
+      final fact = state.fact;
+      print('fact method1 $fact');
+
+      return Container(
+        width: 100,
+        height: 100,
+        color: Colors.green,
+        child: Text(
+          fact,
+          style: TextStyle(color: Colors.black),
+        ),
+      );
+    }
   }
 }
