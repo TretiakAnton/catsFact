@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cats/bloc/cat_events.dart';
 import 'package:cats/bloc/cat_state.dart';
 import 'package:cats/bloc/cats_bloc.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cats/button_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,6 +19,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final CatsBloc bloc = BlocProvider.of<CatsBloc>(context);
+    bloc.add(InitialEvent());
+    ButtonController controller = ButtonController(bloc: bloc);
     return Scaffold(
       body: Center(
         child: BlocBuilder<CatsBloc, CatState>(
@@ -43,11 +45,11 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    CupertinoButton(
-                        onPressed: _refreshButton(bloc),
+                    OutlinedButton(
+                        onPressed: controller.newFact(),
                         child: const Text('Another fact!')),
-                    CupertinoButton(
-                        onPressed: _showDetailsButton(bloc, context),
+                    OutlinedButton(
+                        onPressed: controller.historyPage(context),
                         child: const Text('Fact History'))
                   ],
                 ),
@@ -60,7 +62,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   _refreshButton(CatsBloc bloc) {
-    bloc.updateCurrentIndex();
     bloc.add(NewFactEvent());
     print('fact add');
   }

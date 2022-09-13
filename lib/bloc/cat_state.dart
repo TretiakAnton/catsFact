@@ -6,3 +6,5 @@ class NewFactState extends CatState {
 }
 
 class LoadFactState extends CatState {}
+
+class InitState extends CatState {}
