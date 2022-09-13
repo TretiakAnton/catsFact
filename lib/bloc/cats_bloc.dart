@@ -1,5 +1,6 @@
 import 'package:cats/bloc/cat_events.dart';
 import 'package:cats/bloc/cat_state.dart';
+import 'package:cats/networking/details.dart';
 import 'package:cats/networking/fact_model.dart';
 import 'package:cats/networking/repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,18 +16,21 @@ class CatsBloc extends Bloc<CatEvents, CatState> {
   Stream<CatState> mapEventToState(CatEvents event) async* {
     print('newEvent  $event');
     if (event is NewFactEvent) {
-      final fact = getCurrentFact()?.fact;
-      if (fact != null) {
-        updateCurrentIndex();
-        print('fact $fact');
-        //box.put(fact, DateTime.now());
-        yield NewFactState(fact: fact);
-      }
+      final fact = getNewFact();
+      yield NewFactState(fact: fact);
     } else if (event is InitialEvent) {
       await Repo().refresh();
-      //box = await Hive.openBox('factsBox');
-      //Hive.registerAdapter(DetailsAdapter());
-      yield InitState();
+      box = await Hive.openBox<Details>('factsBox');
+      Hive.registerAdapter(DetailsAdapter());
+      final fact = getNewFact();
+      yield NewFactState(fact: fact);
+    } else if (event is HistoryEvent) {
+      List<Details> history = [];
+      final length = box.length;
+      for (int iterations = 0; iterations <= length; iterations++) {
+        history.add(box.getAt(iterations));
+      }
+      yield HistoryState(history: history);
     }
   }
 
@@ -36,5 +40,17 @@ class CatsBloc extends Bloc<CatEvents, CatState> {
 
   updateCurrentIndex() {
     _currentFact++;
+  }
+
+  String getNewFact() {
+    final fact = getCurrentFact()?.fact;
+    if (fact != null) {
+      updateCurrentIndex();
+      print('fact $fact');
+      box.add(Details(fact: fact, time: DateTime.now()));
+      return fact;
+    } else {
+      return '';
+    }
   }
 }

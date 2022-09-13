@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 Future<void> main() async {
-  //WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

@@ -23,40 +23,46 @@ class _HomePageState extends State<HomePage> {
     ButtonController controller = ButtonController(bloc: bloc);
     return Scaffold(
       body: Center(
-        child: BlocBuilder<CatsBloc, CatState>(
-            builder: (BuildContext context, catState) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Flexible(
-                flex: 3,
-                child: CachedNetworkImage(
-                  imageUrl: 'https://cataas.com/cat',
-                  placeholder: (context, url) =>
-                      const CircularProgressIndicator(),
-                ),
-              ),
-              Flexible(
-                flex: 3,
-                child: SingleChildScrollView(child: method1(catState)),
-              ),
-              Flexible(
-                flex: 1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Flexible(
+              flex: 6,
+              child: BlocBuilder<CatsBloc, CatState>(
+                  builder: (BuildContext context, catState) {
+                return Column(
                   children: [
-                    OutlinedButton(
-                        onPressed: controller.newFact(),
-                        child: const Text('Another fact!')),
-                    OutlinedButton(
-                        onPressed: controller.historyPage(context),
-                        child: const Text('Fact History'))
+                    Flexible(
+                      flex: 3,
+                      child: CachedNetworkImage(
+                        imageUrl: 'https://cataas.com/cat',
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                      ),
+                    ),
+                    Flexible(
+                        flex: 3,
+                        child: SingleChildScrollView(child: method1(catState))),
                   ],
-                ),
-              )
-            ],
-          );
-        }),
+                );
+              }),
+            ),
+            Flexible(
+              flex: 1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  OutlinedButton(
+                      onPressed: controller.newFact(),
+                      child: const Text('Another fact!')),
+                  OutlinedButton(
+                      onPressed: controller.historyPage(context),
+                      child: const Text('Fact History'))
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -83,16 +89,12 @@ class _HomePageState extends State<HomePage> {
     if (state is NewFactState) {
       final fact = state.fact;
       print('fact method1 $fact');
-
-      return Container(
-        width: 100,
-        height: 100,
-        color: Colors.green,
-        child: Text(
-          fact,
-          style: TextStyle(color: Colors.black),
-        ),
+      return Text(
+        fact,
+        style: TextStyle(color: Colors.black),
       );
+    } else {
+      return Text('Is loading');
     }
   }
 }
