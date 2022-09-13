@@ -1,6 +1,8 @@
 import 'package:cats/bloc/cat_events.dart';
 import 'package:cats/bloc/cats_bloc.dart';
+import 'package:cats/pages/history_page.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ButtonController {
   ButtonController({required this.bloc});
@@ -12,7 +14,6 @@ class ButtonController {
     var now = DateTime.now();
     if (now.minute != lastCall.minute) {
       bloc.add(NewFactEvent());
-      print('fact add');
     }
     lastCall = now;
   }
@@ -20,15 +21,14 @@ class ButtonController {
   historyPage(BuildContext context) {
     var now = DateTime.now();
     if (now.minute != lastCall.minute) {
-      print('histroy add');
       bloc.add(HistoryEvent());
     }
     lastCall = now;
-    /*   Navigator.push(
+    Navigator.push(
       context,
       MaterialPageRoute(builder: (context) {
         return const HistoryPage();
       }),
-    );*/
+    );
   }
 }

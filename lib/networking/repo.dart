@@ -2,16 +2,23 @@ import 'package:cats/mapper.dart';
 import 'package:cats/networking/api_service.dart';
 import 'package:cats/networking/fact_model.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:flutter/foundation.dart';
 
 class Repo {
   factory Repo() => _instance;
+
   Repo._();
+
   static final _instance = Repo._();
 
   List<FactModel> _facts = <FactModel>[];
 
   List<FactModel> getFacts() {
     return _facts;
+  }
+
+  int getFactsCount() {
+    return _facts.length;
   }
 
   FactModel? getFactsAtIndex(int index) {
@@ -29,11 +36,11 @@ class Repo {
     try {
       final ApiService apiService = ApiService(dio.Dio());
       final response = await apiService.getFact();
-      print('teg 121 $response');
       _facts = Mapper().factResponse(response);
-      print('teg 122 $_facts');
     } catch (e) {
-      print('error123 $e');
+      if (kDebugMode) {
+        print('error123 $e');
+      }
     }
   }
 }

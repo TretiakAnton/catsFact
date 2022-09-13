@@ -5,6 +5,7 @@ import 'package:cats/bloc/cats_bloc.dart';
 import 'package:cats/button_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -16,6 +17,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void dispose() {
+    Hive.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final CatsBloc bloc = BlocProvider.of<CatsBloc>(context);
@@ -48,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                       child: Padding(
                         padding: const EdgeInsets.all(10),
                         child: SingleChildScrollView(
-                          child: method1(catState),
+                          child: factWidget(catState),
                         ),
                       ),
                     ),
@@ -76,34 +83,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _refreshButton(CatsBloc bloc) {
-    bloc.add(NewFactEvent());
-    print('fact add');
-  }
-
-  _showDetailsButton(CatsBloc bloc, BuildContext context) {
-    print('histroy add');
-    bloc.add(HistoryEvent());
-
-    /*   Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) {
-        return const HistoryPage();
-      }),
-    );*/
-  }
-
-  method1(CatState state) {
-    print('method1');
+  factWidget(CatState state) {
     if (state is NewFactState) {
       final fact = state.fact;
-      print('fact method1 $fact');
-      return Text(
-        fact,
-        style: TextStyle(color: Colors.black),
-      );
+      return Text(fact);
     } else {
-      return Text('Is loading');
+      return const Text('Is loading');
     }
   }
 }

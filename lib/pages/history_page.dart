@@ -15,14 +15,27 @@ class HistoryPage extends StatelessWidget {
     bloc.add(HistoryEvent());
     return Scaffold(
       body: Center(
-        child: BlocBuilder<CatsBloc, CatState>(
-            builder: (BuildContext context, catState) {
-          if (catState is HistoryState) {
-            return SingleChildScrollView(child: _parseText(catState.history));
-          } else {
-            return const CircularProgressIndicator();
-          }
-        }),
+        child: Column(
+          children: [
+            BlocBuilder<CatsBloc, CatState>(
+              builder: (BuildContext context, catState) {
+                if (catState is HistoryState) {
+                  return SingleChildScrollView(
+                      child: _parseText(catState.history));
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              },
+            ),
+            OutlinedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                bloc.add(NewFactEvent());
+              },
+              child: const Text('Back'),
+            ),
+          ],
+        ),
       ),
     );
   }
