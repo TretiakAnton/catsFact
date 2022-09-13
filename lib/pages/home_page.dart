@@ -27,22 +27,31 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Flexible(
-              flex: 6,
+              flex: 4,
               child: BlocBuilder<CatsBloc, CatState>(
                   builder: (BuildContext context, catState) {
                 return Column(
                   children: [
                     Flexible(
                       flex: 3,
-                      child: CachedNetworkImage(
-                        imageUrl: 'https://cataas.com/cat',
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: CachedNetworkImage(
+                          imageUrl: 'https://cataas.com/cat',
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator(),
+                        ),
                       ),
                     ),
                     Flexible(
-                        flex: 3,
-                        child: SingleChildScrollView(child: method1(catState))),
+                      flex: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SingleChildScrollView(
+                          child: method1(catState),
+                        ),
+                      ),
+                    ),
                   ],
                 );
               }),

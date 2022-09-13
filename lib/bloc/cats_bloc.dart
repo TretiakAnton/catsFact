@@ -20,8 +20,6 @@ class CatsBloc extends Bloc<CatEvents, CatState> {
       yield NewFactState(fact: fact);
     } else if (event is InitialEvent) {
       await Repo().refresh();
-      box = await Hive.openBox<Details>('factsBox');
-      Hive.registerAdapter(DetailsAdapter());
       final fact = getNewFact();
       yield NewFactState(fact: fact);
     } else if (event is HistoryEvent) {
